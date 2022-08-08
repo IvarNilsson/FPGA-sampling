@@ -41,9 +41,9 @@ set_property board_part $board     [current_project]
 set_property target_language VHDL  [current_project]
 
 # Set the file that will be top module
-set top_module [file join "$ROOT" pl src wrappers_1_array aw_top.vhd]
+set top_module [file join "$ROOT" pl src wrappers aw_top.vhd]
 
-add_files [file join "$ROOT" pl src wrappers_1_array aw_top.vhd]
+add_files [file join "$ROOT" pl src wrappers aw_top.vhd]
 
 add_files [file join "$ROOT" pl src axi_lite axi_lite_slave.vhd]
 add_files [file join "$ROOT" pl src axi_lite rd_en_pulse.vhd]

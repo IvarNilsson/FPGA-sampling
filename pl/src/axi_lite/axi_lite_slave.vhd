@@ -278,33 +278,34 @@ begin
    -- and the slave is ready to accept the write address and write data.
    slv_reg_wren <= axi_wready and S_AXI_WVALID and axi_awready and S_AXI_AWVALID;
 
-   --process (S_AXI_ACLK)
-   --   -- variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
-   --   variable loc_addr : integer range 0 to (OPT_MEM_ADDR_BITS ** 2 - 1);
-   --begin
-   --   if rising_edge(S_AXI_ACLK) then
-   --      if S_AXI_ARESETN = '0' then
-   --         slv_reg <= (others => (others => '0'));
-   --      else
-   --         loc_addr := to_integer(unsigned(axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB)));
-   --
-   --         if (slv_reg_wren = '1') then
-   --            case loc_addr is
-   --               when 0 to 63 =>
-   --                  for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8 - 1) loop
-   --                     if (S_AXI_WSTRB(byte_index) = '1') then
-   --                        -- Respective byte enables are asserted as per write strobes
-   --                        -- slave registor 0
-   --                        slv_reg(loc_addr)(byte_index * 8 + 7 downto byte_index * 8) <= S_AXI_WDATA(byte_index * 8 + 7 downto byte_index * 8);
-   --                     end if;
-   --                  end loop;
-   --               when others =>
-   --                  slv_reg <= slv_reg;
-   --            end case;
-   --         end if;
-   --      end if;
-   --   end if;
-   --end process;
+   process (S_AXI_ACLK)
+      -- variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
+      variable loc_addr : integer range 0 to (OPT_MEM_ADDR_BITS ** 2 - 1);
+   begin
+      if rising_edge(S_AXI_ACLK) then
+         if S_AXI_ARESETN = '0' then
+            slv_reg <= (others => (others => '0'));
+         else
+            loc_addr := to_integer(unsigned(axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB)));
+
+            if (slv_reg_wren = '1') then
+               case loc_addr is
+                  -- USER: add registers that recive data from PS to PL
+                  when 1 to 69 =>
+                     for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8 - 1) loop
+                        if (S_AXI_WSTRB(byte_index) = '1') then
+                           slv_reg(loc_addr)(byte_index * 8 + 7 downto byte_index * 8) <= S_AXI_WDATA(byte_index * 8 + 7 downto byte_index * 8);
+                        end if;
+                     end loop;
+                  when others =>
+                     slv_reg <= slv_reg;
+               end case;
+            end if;
+            -- USER: add registers that send data from PL to PS
+            slv_reg(0)  <= reg_mic_0;
+         end if;
+      end if;
+   end process;
 
    -- Implement write response logic generation
    -- The write response and response valid signals are asserted by the slave
@@ -420,83 +421,6 @@ begin
             end if;
          end if;
       end if;
-   end process;
-
-   process (S_AXI_ACLK)
-   begin
-      slv_reg     <= (others => (others => '0'));
-      slv_reg(0)  <= reg_mic_0;
-      slv_reg(1)  <= reg_mic_1;
-      slv_reg(2)  <= reg_mic_2;
-      slv_reg(3)  <= reg_mic_3;
-      slv_reg(4)  <= reg_mic_4;
-      slv_reg(5)  <= reg_mic_5;
-      slv_reg(6)  <= reg_mic_6;
-      slv_reg(7)  <= reg_mic_7;
-      slv_reg(8)  <= reg_mic_8;
-      slv_reg(9)  <= reg_mic_9;
-      slv_reg(10) <= reg_mic_10;
-      slv_reg(11) <= reg_mic_11;
-      slv_reg(12) <= reg_mic_12;
-      slv_reg(13) <= reg_mic_13;
-      slv_reg(14) <= reg_mic_14;
-      slv_reg(15) <= reg_mic_15;
-      slv_reg(16) <= reg_mic_16;
-      slv_reg(17) <= reg_mic_17;
-      slv_reg(18) <= reg_mic_18;
-      slv_reg(19) <= reg_mic_19;
-      slv_reg(20) <= reg_mic_20;
-      slv_reg(21) <= reg_mic_21;
-      slv_reg(22) <= reg_mic_22;
-      slv_reg(23) <= reg_mic_23;
-      slv_reg(24) <= reg_mic_24;
-      slv_reg(25) <= reg_mic_25;
-      slv_reg(26) <= reg_mic_26;
-      slv_reg(27) <= reg_mic_27;
-      slv_reg(28) <= reg_mic_28;
-      slv_reg(29) <= reg_mic_29;
-      slv_reg(30) <= reg_mic_30;
-      slv_reg(31) <= reg_mic_31;
-      slv_reg(32) <= reg_mic_32;
-      slv_reg(33) <= reg_mic_33;
-      slv_reg(34) <= reg_mic_34;
-      slv_reg(35) <= reg_mic_35;
-      slv_reg(36) <= reg_mic_36;
-      slv_reg(37) <= reg_mic_37;
-      slv_reg(38) <= reg_mic_38;
-      slv_reg(39) <= reg_mic_39;
-      slv_reg(40) <= reg_mic_40;
-      slv_reg(41) <= reg_mic_41;
-      slv_reg(42) <= reg_mic_42;
-      slv_reg(43) <= reg_mic_43;
-      slv_reg(44) <= reg_mic_44;
-      slv_reg(45) <= reg_mic_45;
-      slv_reg(46) <= reg_mic_46;
-      slv_reg(47) <= reg_mic_47;
-      slv_reg(48) <= reg_mic_48;
-      slv_reg(49) <= reg_mic_49;
-      slv_reg(50) <= reg_mic_50;
-      slv_reg(51) <= reg_mic_51;
-      slv_reg(52) <= reg_mic_52;
-      slv_reg(53) <= reg_mic_53;
-      slv_reg(54) <= reg_mic_54;
-      slv_reg(55) <= reg_mic_55;
-      slv_reg(56) <= reg_mic_56;
-      slv_reg(57) <= reg_mic_57;
-      slv_reg(58) <= reg_mic_58;
-      slv_reg(59) <= reg_mic_59;
-      slv_reg(60) <= reg_mic_60;
-      slv_reg(61) <= reg_mic_61;
-      slv_reg(62) <= reg_mic_62;
-      slv_reg(63) <= reg_mic_63;
-
-      slv_reg(64) <= reg_64;
-      slv_reg(65) <= reg_65;
-
-      slv_reg(66) <= reg_66;
-      --slv_reg(67) <= reg_mic_;
-      --slv_reg(68) <= reg_mic_;
-      --slv_reg(69) <= reg_mic_;
    end process;
 
 end rtl;
