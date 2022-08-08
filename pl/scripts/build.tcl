@@ -10,15 +10,13 @@ set options {
    {impl.arg  "1"             "Run impl (1 to run impl | 0 not run impl)"        }
    {sdk.arg   "1"             "Launch SDK (1 to launch SDK | 0 not launch SDK)"  }
 }
-# TODO: update usage to be better
-#set usage ": build \ [-gui] [-board] [-synth] [-impl]\noptions:"
+# TODO: update usage to be better 
 array set params [::cmdline::getoptions argv $options]
 
-# Print for sanity
 parray params
 
 #TODO: make the auto install of boards work :)
-# Make sure boards are installed
+# Make sure boards are installed 
 #xhub::install [xhub::get_xitems $board ]
 #xhub::update  [xhub::get_xitems $board ]
 
@@ -43,23 +41,25 @@ set_property board_part $board     [current_project]
 set_property target_language VHDL  [current_project]
 
 # Set the file that will be top module
-set top_module [file join "$ROOT" src wrappers_2_arrays aw_top_2_arrays.vhd]
+set top_module [file join "$ROOT" pl src wrappers_1_array aw_top.vhd]
 
-add_files [file join "$ROOT" src wrappers_2_arrays aw_top_2_arrays.vhd]
+add_files [file join "$ROOT" pl src wrappers_1_array aw_top.vhd]
 
-add_files [file join "$ROOT" src axi_lite axi_lite_slave_2_arrays.vhd]
-add_files [file join "$ROOT" src axi_lite rd_en_pulse.vhd]
+add_files [file join "$ROOT" pl src axi_lite axi_lite_slave.vhd]
+add_files [file join "$ROOT" pl src axi_lite rd_en_pulse.vhd]
 
-add_files [file join "$ROOT" src sample_data sample.vhd]
-add_files [file join "$ROOT" src sample_data collector.vhd]
-add_files [file join "$ROOT" src sample_data full_sample_2_arrays.vhd]
+#add_files [file join "$ROOT" src sample_data sample.vhd]
+#add_files [file join "$ROOT" src sample_data collector.vhd]
+#add_files [file join "$ROOT" src sample_data full_sample.vhd]
 
-add_files [file join "$ROOT" src ws_pulse ws_pulse.vhd]
+#add_files [file join "$ROOT" src ws_pulse ws_pulse.vhd]
 
-add_files [file join "$ROOT" src matrix_package.vhd]
+add_files [file join "$ROOT" pl src demo_counter.vhd]
+
+add_files [file join "$ROOT" pl src matrix_package.vhd]
 
 
-add_files -fileset constrs_1 [file join "$ROOT" src constraint.xdc]
+add_files -fileset constrs_1 [file join "$ROOT" pl src constraint.xdc]
 
 import_files -force
 
@@ -67,10 +67,10 @@ import_files -force
 set_property file_type {VHDL 2008} [get_files  *.vhd]
 
 
-set_property file_type {VHDL} [ get_files *axi_lite_slave_2_arrays.vhd]
+set_property file_type {VHDL} [ get_files *axi_lite_slave.vhd]
 # Import Block Designs
-source [ file normalize [ file join $ROOT scripts build_2_arrays zynq_bd.tcl ] ]
-source [ file normalize [ file join $ROOT scripts build_2_arrays fifo_bd.tcl ] ]
+source [ file normalize [ file join $ROOT pl scripts zynq_bd.tcl ] ]
+source [ file normalize [ file join $ROOT pl scripts fifo_bd.tcl ] ]
 
 # Make wrapper fifo
 make_wrapper -inst_template [ get_files {fifo_bd.bd} ]
@@ -82,17 +82,25 @@ add_files -files [file join "$ROOT" vivado_files acoustic_warfare.srcs sources_1
 
 update_compile_order -fileset sources_1
 
-## run synthesis
+## start gui
 switch $params(gui) {
    1 { start_gui }
    0 { puts "gui not started" }
    default { send_msg "BuildScript-0" "ERROR" "not a suported input" }
 }
 
-## run implementation
+## run synth
 switch $params(synth) {
    1 { launch_runs synth_1 -jobs 4
        wait_on_run synth_1 }
+   0 { puts "synth not started" }
+   default { send_msg "BuildScript-0" "ERROR" "not a suported input" }
+}
+
+## run impl
+switch $params(impl) {
+   1 { launch_runs impl_1 -to_step write_bitstream -jobs 4
+       wait_on_run impl_1 }
    0 { puts "synth not started" }
    default { send_msg "BuildScript-0" "ERROR" "not a suported input" }
 }
@@ -108,4 +116,3 @@ switch $params(sdk) {
    0 { puts "SDK not launched" }
    default { send_msg "BuildScript-0" "ERROR" "not a suported input" }
 }
-
