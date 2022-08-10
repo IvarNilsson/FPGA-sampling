@@ -290,8 +290,8 @@ begin
 
             if (slv_reg_wren = '1') then
                case loc_addr is
-                  -- USER: add registers that recive data from PS to PL
-                  when 1 to 69 =>
+                     -- USER: add registers that recive data from PS to PL
+                  when 1 to 63 =>
                      for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8 - 1) loop
                         if (S_AXI_WSTRB(byte_index) = '1') then
                            slv_reg(loc_addr)(byte_index * 8 + 7 downto byte_index * 8) <= S_AXI_WDATA(byte_index * 8 + 7 downto byte_index * 8);
@@ -303,6 +303,8 @@ begin
             end if;
             -- USER: add registers that send data from PL to PS
             slv_reg(0)  <= reg_mic_0;
+            slv_reg(64) <= reg_64;
+            slv_reg(65) <= reg_65;
          end if;
       end if;
    end process;
