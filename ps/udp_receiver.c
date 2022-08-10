@@ -52,10 +52,10 @@ int main(){
       buffer[n] = '\0';
 
       // write data in txt file
-      for (int i = 0; i < 67; i++){
+      for (int i = 0; i < 2; i++){
          fprintf(fp, "%9d, ", buffer[i]);
       }
-      fprintf(fp, "%9d\n", buffer[67]);
+      fprintf(fp, "%9d\n", buffer[3]);
    }
    return 0;
 }
