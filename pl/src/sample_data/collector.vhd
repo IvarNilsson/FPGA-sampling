@@ -14,9 +14,9 @@ entity collector is
    -- CHAIN_MATRIX_VALID_OUT: Indicates to the next component that the data has ben updated in CHAIN_MATRIX_DATA_OUT
    ------------------------------------------------------------------------------------------------------------------------------------------------
    generic (
-      -- TODO: implement generics   
-      --G_BITS_MIC : integer := 24; -- Defines the resulotion of a mic sample
-      --G_NR_MICS  : integer := 16  -- Number of chains in the Matrix
+      -- TODO: implement generics
+      G_BITS_MIC : integer := 24; -- Defines the resulotion of a mic sample
+      G_NR_MICS  : integer := 16  -- Number of chains in the Matrix
    );
    port (
       clk                    : in std_logic;

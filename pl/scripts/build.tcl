@@ -41,23 +41,23 @@ set_property board_part $board     [current_project]
 set_property target_language VHDL  [current_project]
 
 # Set the file that will be top module
-set top_module [file join "$ROOT" src wrappers aw_top.vhd]
+set top_module [file join "$ROOT" pl src wrappers aw_top.vhd]
 
-add_files [file join "$ROOT" src wrappers aw_top.vhd]
+add_files [file join "$ROOT" pl src wrappers aw_top.vhd]
 
-add_files [file join "$ROOT" src axi_lite axi_lite_slave.vhd]
-add_files [file join "$ROOT" src axi_lite rd_en_pulse.vhd]
+add_files [file join "$ROOT" pl src axi_lite axi_lite_slave.vhd]
+add_files [file join "$ROOT" pl src axi_lite rd_en_pulse.vhd]
 
-add_files [file join "$ROOT" src sample_data sample.vhd]
-add_files [file join "$ROOT" src sample_data collector.vhd]
-add_files [file join "$ROOT" src sample_data full_sample.vhd]
+add_files [file join "$ROOT" pl src sample_data sample.vhd]
+add_files [file join "$ROOT" pl src sample_data collector.vhd]
+add_files [file join "$ROOT" pl src sample_data full_sample.vhd]
 
-add_files [file join "$ROOT" src ws_pulse ws_pulse.vhd]
+add_files [file join "$ROOT" pl src ws_pulse ws_pulse.vhd]
 
-add_files [file join "$ROOT" src matrix_package.vhd]
+add_files [file join "$ROOT" pl src matrix_package.vhd]
 
 
-add_files -fileset constrs_1 [file join "$ROOT" src constraint.xdc]
+add_files -fileset constrs_1 [file join "$ROOT" pl src constraint.xdc]
 
 import_files -force
 
@@ -67,8 +67,8 @@ set_property file_type {VHDL 2008} [get_files  *.vhd]
 
 set_property file_type {VHDL} [ get_files *axi_lite_slave.vhd]
 # Import Block Designs
-source [ file normalize [ file join $ROOT scripts build_1_array zynq_bd.tcl ] ]
-source [ file normalize [ file join $ROOT scripts build_1_array fifo_bd.tcl ] ]
+source [ file normalize [ file join $ROOT pl scripts zynq_bd.tcl ] ]
+source [ file normalize [ file join $ROOT pl scripts fifo_bd.tcl ] ]
 
 # Make wrapper fifo
 make_wrapper -inst_template [ get_files {fifo_bd.bd} ]
