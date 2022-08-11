@@ -1,8 +1,11 @@
 from scipy import signal
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
-filename= '/home/ljudkriget/Projects/Ljud_Kriget/ps/mic_data/one_source_moving_2000hz.txt'
+ROOT = os.getcwd()
+filename = (ROOT + "/ps/mic_data/delay_.txt")
+
 fs = 15625
 data = np.loadtxt(open(filename, 'rb').readlines()[:-1], delimiter=',') # load data from txt file to np array
 fs = data[0,2]  # sampling frequency
