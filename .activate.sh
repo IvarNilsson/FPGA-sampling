@@ -85,8 +85,7 @@ fi
 alias clean="git clean -xdie $VENV_NAME"
 alias vunit='python $(git rev-parse --show-toplevel)/pl/run.py --gtkwave-fmt vcd'
 alias gtkwave='python $(git rev-parse --show-toplevel)/pl/run.py --gtkwave-fmt vcd --gui'
-alias build='vivado -notrace -mode batch -source $(git rev-parse --show-toplevel)/pl/scripts/build_1_array/build_1_array.tcl'
-alias build_2_arrays='vivado -notrace -mode batch -source $(git rev-parse --show-toplevel)/pl/scripts/build_2_arrays/build_2_arrays.tcl'
+alias build='vivado -notrace -mode batch -source $(git rev-parse --show-toplevel)/pl/scripts/build_2_arrays/build_2_arrays.tcl'
 
 echo -e '
 Welcome to Acustic Warfare!
