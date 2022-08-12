@@ -47,7 +47,7 @@ begin
             if chain_matrix_valid_in(i) = '1' then -- checks if valid signals from all collectors is HIGH
                valid_check(i) <= '1';
             end if;
-         end loop;
+         end loop; --
 
          if valid_check = "1111" then                       -- If all valid signal was High, then store each chain in a temporary holder
             temp_chain_matrix_0 <= chain_x4_matrix_data_in(0); --chain 1 
